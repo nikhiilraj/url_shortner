@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const {connectMongoDb} = require("./connect")
 const urlRoute = require("./routes/url");
 const {URL} = require("./models/url");
@@ -6,12 +7,23 @@ const {URL} = require("./models/url");
 const app = express();
 const PORT = 3001;
 
+
 //connection
 connectMongoDb("mongodb://127.0.0.1:27017/url-shortner")
 .then(()=> {console.log("Mongodb Connected")})
 .catch((err) => console.log("Error", err));
 
 app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views',path.resolve('./views'));
+
+app.get('/test', async (req,res)=>{
+    const allUrls = await URL.find({});
+    return res.render("home", {
+        urls: allUrls,
+    });
+});
 
 app.use("/url", urlRoute);
 
