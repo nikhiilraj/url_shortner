@@ -10,5 +10,8 @@ router.get("/", async(req,res) => {
         id:null,
     });
 })
+router.get('/login', (req,res)=>{
+    return res.render("login");
+});
 
 module.exports = router;
